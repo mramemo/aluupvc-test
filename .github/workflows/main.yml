@@ -1,0 +1,46 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          cache: true
+
+      - name: Create Flutter project
+        run: |
+          flutter create aluupvc_trial --org com.mramemo.aluupvc
+          rm -rf aluupvc_trial/assets || true
+          cp -r app_files/assets aluupvc_trial/assets
+          cp app_files/lib/main.dart aluupvc_trial/lib/main.dart
+          cp app_files/pubspec.yaml aluupvc_trial/pubspec.yaml
+
+      - name: Get packages
+        working-directory: aluupvc_trial
+        run: flutter pub get
+
+      - name: Build APK (release)
+        working-directory: aluupvc_trial
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: aluupvc_trial/build/app/outputs/flutter-apk/app-release.apk
