@@ -1,0 +1,19 @@
+name: aluupvc_trial
+description: Pro trial starter for Aluminum/UPVC deductions (Arabic/English).
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.2.3
+  path_provider: ^2.1.3
+  share_plus: ^10.0.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/rules_default.json
